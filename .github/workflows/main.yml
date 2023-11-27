@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@v2   # Обновленная версия actions/checkout
 
     - name: Deploy to Server
-      uses: appleboy/ssh-action@v0.1.9  # Используй конкретную версию, например, v0.4.2
+      uses: appleboy/ssh-action@v1 # Используй конкретную версию, например, v0.4.2
       with:
         host: 164.90.214.44
         username: ${{ secrets.USERNAME }}
