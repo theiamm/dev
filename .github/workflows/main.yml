@@ -11,10 +11,12 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2   # Обновленная версия actions/checkout
+      uses: actions/checkout@v2
 
     - name: Deploy to Server
-      uses: appleboy/ssh-action@v1 # Используй конкретную версию, например, v0.4.2
+      uses: appleboy/ssh-action
+      env:
+        SSH_ACTION_VERSION: latest
       with:
         host: 164.90.214.44
         username: ${{ secrets.USERNAME }}
@@ -24,5 +26,6 @@ jobs:
           cd /root/django_deploy_app/myproject
           git pull origin main
           # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
+
 
 
