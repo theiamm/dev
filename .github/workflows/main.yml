@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2   # Обновленная версия actions/checkout
 
     - name: Deploy to Server
-      uses: appleboy/ssh-action@main
+      uses: appleboy/ssh-action@v0.4.2   # Используй конкретную версию, например, v0.4.2
       with:
         host: 164.90.214.44
         username: ${{ secrets.USERNAME }}
@@ -22,9 +22,7 @@ jobs:
         port: 22
         script: |
           cd /root/django_deploy_app/myproject
-          git pull origin main  # Пример команды, чтобы получить изменения из репозитория
+          git pull origin main
           # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
-
-         
 
 
