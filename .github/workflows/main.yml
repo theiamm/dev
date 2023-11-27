@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Deploy to Server
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@main
       with:
         host: 164.90.214.44
         username: ${{ secrets.USERNAME }}
@@ -22,7 +22,7 @@ jobs:
         port: 22
         script: |
           cd /root/django_deploy_app/myproject
-          git pull origin master  # Пример команды, чтобы получить изменения из репозитория
+          git pull origin main  # Пример команды, чтобы получить изменения из репозитория
           # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
 
          
