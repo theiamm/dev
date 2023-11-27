@@ -1,21 +1,20 @@
-name: Deploy
-  
+name: main
+
 on:
   push:
     branches:
-          - main
-jobs:
-  build:
+      - main
 
+jobs:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6]
-    steps: 
-    - uses: actions/checkout@v3
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@main
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@v2
       with:
         host: 164.90.214.44
         username: ${{ secrets.USERNAME }}
@@ -25,5 +24,7 @@ jobs:
           cd /root/django_deploy_app/myproject
           git pull origin main
           # Add other commands as needed
+
+         
 
 
