@@ -1,20 +1,19 @@
-name: Deploy
+name: Deploy to Server
 
 on:
   push:
     branches:
-            - master
-jobs:
-  build:
+      - master
 
+jobs:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6]
-    steps: 
-    - uses: actions/checkout@v3
-    - name: executing remote ssh commands using password
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to Server
       uses: appleboy/ssh-action@master
       with:
         host: 164.90.214.44
@@ -22,3 +21,6 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: 22
         script: |
+          cd /root/django_deploy_app/myproject
+          git pull origin master  # Пример команды, чтобы получить изменения из репозитория
+          # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
