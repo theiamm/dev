@@ -11,17 +11,19 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup SSH agent
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      uses: actions/checkout@v3
 
     - name: Deploy to Server
-      run: |
-        ssh -o StrictHostKeyChecking=no -p 22 ${{ secrets.USERNAME }}@164.90.214.44 "cd /root/django_deploy_app/myproject && git pull origin main"
-        # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
+      uses: appleboy/ssh-action@main
+      with:
+        host: 164.90.214.44
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: 22
+        script: |
+          cd /root/django_deploy_app/myproject
+          git pull origin main # Пример команды, чтобы получить изменения из репозитория
+          # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
 
 
 
