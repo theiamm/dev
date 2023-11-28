@@ -6,24 +6,33 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Deploy to Server
       uses: appleboy/ssh-action@main
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
       with:
-        host: 164.90.214.44
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 22
-        script: |
-          cd /root/django_deploy_app/myproject
-          git pull origin main # Пример команды, чтобы получить изменения из репозитория
-          # Добавь другие команды, которые нужно выполнить на сервере после обновления кода
+          python-version: ${{ matrix.python-version }}
+    - name: Install requirements
+      run: |
+          pip install -r requirements.txt
+
+    - name: install ssh keys
+      run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.TOKEN }}" > ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST }} > ~/.ssh/known_hosts
+    - name: connect and pull
+      run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "cd django_deploy_app/myproject && git checkout main && git pull"
 
 
 
