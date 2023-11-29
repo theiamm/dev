@@ -31,8 +31,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: 164.90.214.44
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          username: root
+          password: Asselya
           port: 22
           script: |
             cd /root/django_deploy_app/myproject
