@@ -26,11 +26,7 @@ jobs:
         run: |
             python -m pip install django
             python manage.py test
-      - name: install ssh keys
-        run: |
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.TOKEN }}" > ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.HOST }} > ~/.ssh/known_hosts
+
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
