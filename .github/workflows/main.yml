@@ -13,26 +13,38 @@ jobs:
         python-version: ["3.10"]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
           python-version: ${{ matrix.python-version }}
-    - name: Run Tests
-      run: |
-        python -m pip install django
-        python manage.py test
-          
-    - name: install ssh keys
-      run: |
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Tests
+        run: |
+            python -m pip install django
+            python manage.py test
+      - name: install ssh keys
+        run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.TOKEN }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.HOST }} > ~/.ssh/known_hosts
-    - name: connect and pull
-      run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} "cd django_deploy_app/myproject && git checkout main && git pull"
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: 164.90.214.44
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            cd /root/django_deploy_app/myproject
+            source /root/venv/bin/activate
+            git pull
+            python manage.py migrate
+            python manage.py collectstatic --noinput
+            supervisorctl restart all
 
 
 
